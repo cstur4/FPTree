@@ -105,8 +105,8 @@ public class FPTree {
 		for(int i=0;i<headerTable.size();++i)
 			map.put(headerTable.get(i).getName(), i);
 		
-		/*(can't just compare the number occurs because of the same numbers, we need total order(È«Ðò) instead of 
-			partial order(Æ«Ðò) */
+		/*(can't just compare the number occurs because of the same numbers, we need total order(å…¨åº) instead of 
+			partial order(ååº) */
 		for(LinkedList<String> record:records){
 			Collections.sort(record, new Comparator<String>(){
 				@Override
