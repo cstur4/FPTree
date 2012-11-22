@@ -1,4 +1,4 @@
-package com.tur4.algorithm;
+﻿package com.tur4.algorithm;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -196,24 +196,35 @@ public class FPTree {
 		
 		return root;
 	}
+	private void combination(List<TreeNode> nodes, int i, String itemset, List<String> posfix){
+		if(i == nodes.size()){
+			StringBuilder sb = new StringBuilder();
+			sb.append(itemset);
+			for(String s:posfix)
+	    	   sb.append(s).append("/");
+	        if(sb.toString().length()>2){
+				frequenceSet.add(sb.toString());
+				LOG.debug(sb.toString() + " added");
+			}
+			return;
+		}
+		TreeNode node = nodes.get(i);
+		combination(nodes, i+1, itemset+node.getName()+"/", posfix);
+		combination(nodes, i+1, itemset, posfix);
+      
+	}
+	
+	
 	public void FPGrowth(List<LinkedList<String>> records, List<String> pattern, int minSupport){
 		
 		List<TreeNode> headerTable = buildHeaderTable(records, minSupport);
 		LOG.debug("pattern="+pattern+"\theaderTable:"+headerTable);
 		TreeNode root = buildFPTree(records, headerTable);
 		
-		if(pattern != null && pattern.size() != 0){
+		if(records.size() == 1){//单路径
 			
-			for (TreeNode header : headerTable) {
-				StringBuilder sb = new StringBuilder();
-                sb.append(header.getName()).append("/");
-	            for(String s:pattern)
-	        	   sb.append(s).append("/");
-	            if(sb.toString().length()!=0){
-					frequenceSet.add(sb.toString());
-					LOG.debug(sb.toString() + " added");
-				}
-            }
+			combination(headerTable, 0, "", pattern);
+			return;
 			
 		}
 		if(root.getChildren()==null || root.getChildren().size()==0)
